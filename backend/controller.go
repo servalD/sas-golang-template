@@ -81,6 +81,7 @@ func loginHandler(db *sql.DB) fiber.Handler {
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Erreur lors de la création du token"})
 		}
+		// Expiration dans 24 heures
 		session := UserSession{
 			UserID: user.ID,
 			Token:  token,

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { User, LoginCredentials, SignupCredentials, AuthContextType } from '../types/auth';
 
-const BACKEND_URL = `http://${import.meta.env.VITE_BACKEND_HOST}:${import.meta.env.VITE_BACKEND_PORT}`;
+const BACKEND_URL = `${import.meta.env.VITE_BACKEND_HOST}:${import.meta.env.VITE_BACKEND_PORT}`;
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -27,7 +27,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchUserData = async (token: string) => {
     try {
       const response = await axios.get(`${BACKEND_URL}/me`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: {
+          Authorization: `Bearer ${token}`,
+          AccessControlAllowOrigin: "*"
+         }
       });
       setUser(response.data);
     } catch (error) {
@@ -42,6 +45,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await axios.post(`${BACKEND_URL}/login`, {
         username: credentials.username,
         password: credentials.password
+      }, {
+        headers: {
+          AccessControlAllowOrigin: "*"
+        }
       });
       const { token, user } = response.data;
       localStorage.setItem('token', token);
@@ -58,6 +65,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         username: credentials.username,
         email: credentials.email,
         password: credentials.password
+      }, {
+        headers: {
+          AccessControlAllowOrigin: "*"
+        }
       });
       const { token, user } = response.data;
       localStorage.setItem('token', token);
