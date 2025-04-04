@@ -10,4 +10,6 @@ RUN go build -o /bin/backend
 
 FROM scratch
 COPY --from=builder /go/bin/backend /go/bin/backend
+ARG VITE_BACKEND_PORT
+EXPOSE ${VITE_BACKEND_PORT}
 ENTRYPOINT ["/go/bin/backend"]
